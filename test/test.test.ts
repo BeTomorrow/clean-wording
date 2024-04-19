@@ -1,7 +1,7 @@
 import { compare, getFileKeys, getProjectKeys } from "../src/script-utils";
 
 test("Flutter - show project wording keys", () => {
-  const keys = getProjectKeys("../test/project/flutter/src", {
+  const keys = getProjectKeys("test/project/flutter/src", {
     matches: [{ regex: "localizations\\.([a-zA-Z0-9_]+)" }],
   });
 
@@ -13,7 +13,7 @@ test("Flutter - show project wording keys", () => {
 });
 
 test("Flutter - show project wording keys - with multiple regexes", () => {
-  const keys = getProjectKeys("../test/project/flutter/src", {
+  const keys = getProjectKeys("test/project/flutter/src", {
     matches: [
       { regex: "localizations\\.([a-zA-Z0-9_]+)" },
       { regex: "AppLocalizations\\.of\\(context\\)!?\\.([a-zA-Z0-9_]+)" },
@@ -29,7 +29,7 @@ test("Flutter - show project wording keys - with multiple regexes", () => {
 });
 
 test("Flutter - show file wording keys (with .arb)", async () => {
-  const keys = await getFileKeys("../test/project/flutter/wordings.arb");
+  const keys = await getFileKeys("test/project/flutter/wordings.arb");
 
   expect(keys).toStrictEqual([
     "@wordingWithParameter",
@@ -40,7 +40,7 @@ test("Flutter - show file wording keys (with .arb)", async () => {
 });
 
 test("Flutter - show file wording keys (with .arb) - with ignore some keys", async () => {
-  const keys = await getFileKeys("../test/project/flutter/wordings.arb", {
+  const keys = await getFileKeys("test/project/flutter/wordings.arb", {
     replaces: [{ regex: "^@.*", by: "" }],
   });
 
@@ -52,7 +52,7 @@ test("Flutter - show file wording keys (with .arb) - with ignore some keys", asy
 });
 
 test("Flutter - show file wording keys (with .arb) - with ignore and transform some keys", async () => {
-  const keys = await getFileKeys("../test/project/flutter/wordings.arb", {
+  const keys = await getFileKeys("test/project/flutter/wordings.arb", {
     replaces: [
       { regex: "^@.*", by: "" },
       { regex: "wordingWithParameter$", by: "wordingWithCustom" },
@@ -67,10 +67,10 @@ test("Flutter - show file wording keys (with .arb) - with ignore and transform s
 });
 
 test("Flutter - show unused file wording keys", async () => {
-  const projectKeys = getProjectKeys("../test/project/flutter/src", {
+  const projectKeys = getProjectKeys("test/project/flutter/src", {
     matches: [{ regex: "localizations\\.([a-zA-Z0-9_]+)" }],
   });
-  const fileKeys = await getFileKeys("../test/project/flutter/wordings.arb", {
+  const fileKeys = await getFileKeys("test/project/flutter/wordings.arb", {
     replaces: [{ regex: "^@.*", by: "" }],
   });
   const diffKeys = compare(projectKeys, fileKeys, "inverted", "diff", false);
@@ -79,7 +79,7 @@ test("Flutter - show unused file wording keys", async () => {
 });
 
 test("React - show project wording keys", () => {
-  const keys = getProjectKeys("../test/project/react/src", {
+  const keys = getProjectKeys("test/project/react/src", {
     matches: [{ regex: 'i18n\\.t\\("((.|\n)+?)"' }],
   });
 
@@ -92,7 +92,7 @@ test("React - show project wording keys", () => {
 });
 
 test("React - show project wording keys - with ignore some keys", () => {
-  const keys = getProjectKeys("../test/project/react/src", {
+  const keys = getProjectKeys("test/project/react/src", {
     matches: [{ regex: 'i18n\\.t\\("((.|\n)+?)"' }],
     replaces: [{ regex: "^.*\\.withParameter$" }],
   });
@@ -105,7 +105,7 @@ test("React - show project wording keys - with ignore some keys", () => {
 });
 
 test("React - show project wording keys - with transform some keys", () => {
-  const keys = getProjectKeys("../test/project/react/src", {
+  const keys = getProjectKeys("test/project/react/src", {
     matches: [{ regex: 'i18n\\.t\\("((.|\n)+?)"' }],
     replaces: [{ regex: "\\.withParameter$", by: ".withCustom" }],
   });
@@ -119,7 +119,7 @@ test("React - show project wording keys - with transform some keys", () => {
 });
 
 test("React - show file wording keys (with .json)", async () => {
-  const keys = await getFileKeys("../test/project/react/wordings.json");
+  const keys = await getFileKeys("test/project/react/wordings.json");
 
   expect(keys).toStrictEqual([
     "wording.default",
@@ -132,7 +132,7 @@ test("React - show file wording keys (with .json)", async () => {
 });
 
 test("React - show file wording keys (with .json) - with transform some keys", async () => {
-  const keys = await getFileKeys("../test/project/react/wordings.json", {
+  const keys = await getFileKeys("test/project/react/wordings.json", {
     replaces: [{ regex: "(.zero|.one|.other)$" }],
   });
 
@@ -145,7 +145,7 @@ test("React - show file wording keys (with .json) - with transform some keys", a
 });
 
 test("React - show file wording keys (with .json flatten)", async () => {
-  const keys = await getFileKeys("../test/project/react/wordings_flatten.json");
+  const keys = await getFileKeys("test/project/react/wordings_flatten.json");
 
   expect(keys).toStrictEqual([
     "wording.default",
@@ -166,10 +166,10 @@ test("React - show file wording keys (with url)", async () => {
 });
 
 test("React - show unused file wording keys", async () => {
-  const projectKeys = getProjectKeys("../test/project/react/src", {
+  const projectKeys = getProjectKeys("test/project/react/src", {
     matches: [{ regex: 'i18n\\.t\\("((.|\n)+?)"' }],
   });
-  const fileKeys = await getFileKeys("../test/project/react/wordings.json", {
+  const fileKeys = await getFileKeys("test/project/react/wordings.json", {
     replaces: [{ regex: "(.zero|.one|.other)$" }],
   });
   const diffKeys = compare(projectKeys, fileKeys, "inverted", "diff", false);

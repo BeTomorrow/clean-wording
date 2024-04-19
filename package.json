@@ -1,10 +1,10 @@
 {
   "name": "@betomorrow/clean-wording",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utility for cleaning up unused wordings.",
   "main": "lib/index.js",
   "bin": {
-    "clean-wording": "./lib/index.js"
+    "clean-wording": "lib/index.js"
   },
   "publishConfig": {
     "access": "public"
@@ -12,6 +12,7 @@
   "scripts": {
     "build": "tsc -p .",
     "prepublishOnly": "npm run build",
+    "bumpAndPublish": "npm run build && npm version patch && npm publish",
     "test": "jest",
     "clean-wording-js": "npm run build && node ./lib/index.js -c clean-wording-config.json",
     "clean-wording": "npx ts-node ./src/index.ts -c clean-wording-config.json"

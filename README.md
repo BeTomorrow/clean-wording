@@ -29,8 +29,8 @@ All config :
     "projectSourcePath": "<path_to_source_files>",
     "projectSourceParser": {
         "matches": [
-            { "regex": "<regex_1>" },
-            { "regex": "<regex_2>" },
+            { "regex": "<regex_1>", position: <extract_value_index_default_1> },
+            { "regex": "<regex_2>", position: <extract_value_index_default_1> },
             ...
         ],
         "replaces": [
@@ -53,7 +53,7 @@ Exemple for a React project :
 {
     "projectSourcePath": "src/",
     "projectSourceParser": {
-        "matches": [{ "regex": 'i18n\\.t\\("((.|\n)+?)"' }]
+        "matches": [{ "regex": "i18n\\.t\\(\"((.|\n)+?)\"" }]
     },
     "wordingsSource": "assets/strings/map.json",
     "wordingsSourceParser": {
@@ -63,7 +63,7 @@ Exemple for a React project :
                 "regex": "(.zero|.one|.other)$"
             }
         ]
-    },
+    }
 }
 ```
 
@@ -74,8 +74,8 @@ Exemple for a Flutter project :
     "projectSourcePath": "lib/src/",
     "projectSourceParser": {
         "matches": [
-            { regex: "context\\.curLocalizations\\.([a-zA-Z0-9_]+)" },
-            { regex: "AppLocalizations\\.of\\(context\\)!?\\.([a-zA-Z0-9_]+)" },
+            { "regex": "context\\.curLocalizations\\.([a-zA-Z0-9_]+)" },
+            { "regex": "AppLocalizations\\.of\\(context\\)!?\\.([a-zA-Z0-9_]+)" }
         ]
     },
     "wordingsSource": "lib/asset/translations/intl_fr.arb",
@@ -83,10 +83,10 @@ Exemple for a Flutter project :
         "replaces": [
             {
                 "_comment": "remove all keys begining by @",
-                "regex": "^@.*",
+                "regex": "^@.*"
             }
         ]
-    },
+    }
 }
 ```
 

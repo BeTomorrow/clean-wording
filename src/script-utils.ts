@@ -96,7 +96,7 @@ export const getProjectKeys = (
 
   return getUniqSortedKeys(
     getKeysInFolder(
-      path.join(__dirname, projectSourcePath),
+      path.join(process.cwd(), projectSourcePath),
       projectSourceParser,
       verbose
     )
@@ -118,13 +118,13 @@ export const getFileKeys = async (
     keysDict = dotNotate(result);
   } else if (wordingsSource.endsWith(".arb")) {
     const content = fs.readFileSync(
-      path.join(__dirname, wordingsSource),
+      path.join(process.cwd(), wordingsSource),
       "utf-8"
     );
     keysDict = JSON.parse(content);
   } else if (wordingsSource.endsWith(".json")) {
     const content = fs.readFileSync(
-      path.join(__dirname, wordingsSource),
+      path.join(process.cwd(), wordingsSource),
       "utf-8"
     );
     keysDict = dotNotate(JSON.parse(content));
