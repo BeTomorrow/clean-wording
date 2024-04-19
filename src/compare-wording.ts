@@ -9,7 +9,7 @@ export async function mainFunction(argv: string[]) {
     .description("Get all wording-keys from a file that unused in a project")
     .option(
       "-c, --config <path>",
-      "[Required] Path on config json file (ex: clean-wording-config.json)"
+      "[Required] Path on config json file (ex: .clean_wording_config.json)"
     )
     .option(
       "-sp, --showAllProjectWordingKeys",

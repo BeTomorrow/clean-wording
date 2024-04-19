@@ -6,7 +6,7 @@ Utility for cleaning up unused wordings.
 
 ## Create configuration
 
-Create wording config file named for exemple 'clean_wording_config.json' at your project root location.
+Create wording config file named for exemple '.clean_wording_config.json' at your project root location.
 
 All required config :
 
@@ -111,7 +111,7 @@ Add scripts lines to invoke tools easily with npm in package.json
 ```
 {
     "scripts": {
-        "clean-wording": "clean-wording -c clean_wording_config.json"
+        "clean-wording": "clean-wording -c .clean_wording_config.json"
     }
 }
 ```
@@ -121,14 +121,14 @@ Add scripts lines to invoke tools easily with npm in package.json
 Use directly this command
 
 ```
-npx -p @betomorrow/clean-wording clean-wording -c clean_wording_config.json
+npx -p @betomorrow/clean-wording clean-wording -c .clean_wording_config.json
 ```
 
 ## Command options
 
 ```
 Options:
-    -c, --config <path>                [Required] Path on config json file (ex: clean-wording-config.json)
+    -c, --config <path>                [Required] Path on config json file (ex: .clean_wording_config.json)
     -sp, --showAllProjectWordingKeys   Show all detected project wording-keys
     -sf, --showAllFileWordingKeys      Show all detected file wording-keys
     -spo, --showOrphanProjectKeys      Show project wording-keys not present in the file wording-keys

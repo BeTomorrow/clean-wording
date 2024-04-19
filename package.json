@@ -1,6 +1,6 @@
 {
   "name": "@betomorrow/clean-wording",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Utility for cleaning up unused wordings.",
   "main": "lib/index.js",
   "bin": {
@@ -14,8 +14,8 @@
     "prepublishOnly": "npm run build",
     "bumpAndPublish": "npm run build && npm version patch && npm publish",
     "test": "jest",
-    "clean-wording-js": "npm run build && node ./lib/index.js -c clean-wording-config.json",
-    "clean-wording": "npx ts-node ./src/index.ts -c clean-wording-config.json"
+    "clean-wording-js": "npm run build && node ./lib/index.js -c .clean_wording_config.json",
+    "clean-wording": "npx ts-node ./src/index.ts -c .clean_wording_config.json"
   },
   "author": "Benjamin Derrien",
   "license": "MIT",
