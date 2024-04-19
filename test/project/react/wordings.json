@@ -1,0 +1,12 @@
+{
+  "wording": {
+    "default": "Wording default",
+    "onlyInFile": "Wording only in file",
+    "withCounter": {
+      "zero": "0",
+      "one": "1",
+      "other": "2"
+    },
+    "withParameter": "Wording with number {{count}}"
+  }
+}

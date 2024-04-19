@@ -1,0 +1,38 @@
+{
+  "name": "clean-wording",
+  "version": "1.0.0",
+  "description": "Utility for cleaning up unused wordings.",
+  "main": "lib/index.js",
+  "bin": {
+    "clean-wording": "./lib/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "prepublishOnly": "npm run build",
+    "test": "jest",
+    "clean-wording-js": "npm run build && node ./lib/index.js -c clean-wording-config.json",
+    "clean-wording": "npx ts-node ./src/index.ts -c clean-wording-config.json"
+  },
+  "author": "Benjamin Derrien",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "commander": "^12.0.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/lodash": "^4.14.165",
+    "@types/node": "^14.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "files": [
+    "lib/"
+  ]
+}

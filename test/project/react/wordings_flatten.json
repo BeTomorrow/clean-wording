@@ -1,0 +1,8 @@
+{
+  "wording.default": "Wording default",
+  "wording.withParameter": "Wording with number {{count}}",
+  "wording.withCounter.zero": "0",
+  "wording.withCounter.one": "1",
+  "wording.withCounter.other": "2",
+  "wording.onlyInFile": "Wording only in file"
+}

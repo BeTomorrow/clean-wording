@@ -1,0 +1,12 @@
+{
+  "@wordingWithParameter": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "wordingWithParameter": "Wording with number {count}",
+  "wording": "Wording",
+  "wordingOnlyInFile": "Wording only in file"
+}
