@@ -53,7 +53,7 @@ Exemple for a React project :
 {
     "projectSourcePath": "src/",
     "projectSourceParser": {
-        "matches": [{ "regex": "i18n\\.t\\("((.|\n)+?)"" }]
+        "matches": [{ "regex": 'i18n\\.t\\("((.|\n)+?)"' }]
     },
     "wordingsSource": "assets/strings/map.json",
     "wordingsSourceParser": {
@@ -99,11 +99,11 @@ Install it as dev dependencies
 ```
 # With npm
 
-npm install @bderrien/clean-wording --save-dev
+npm install @betomorrow/clean-wording --save-dev
 
 # With yarn
 
-yarn add @bderrien/clean-wording --save-dev
+yarn add @betomorrow/clean-wording --save-dev
 ```
 
 Add scripts lines to invoke tools easily with npm in package.json
@@ -121,7 +121,7 @@ Add scripts lines to invoke tools easily with npm in package.json
 Use directly this command
 
 ```
-npx -p @bderrien/clean-wording clean-wording -c clean_wording_config.json
+npx -p @betomorrow/clean-wording clean-wording -c clean_wording_config.json
 ```
 
 ## Command options
