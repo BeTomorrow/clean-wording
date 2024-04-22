@@ -1,6 +1,6 @@
 {
   "name": "@betomorrow/clean-wording",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Utility for cleaning up unused wordings.",
   "main": "lib/index.js",
   "bin": {
