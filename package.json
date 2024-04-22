@@ -9,6 +9,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
   "scripts": {
     "build": "tsc -p .",
     "prepublishOnly": "npm run build",
