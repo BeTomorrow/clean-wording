@@ -14,46 +14,57 @@ All required config :
 {
     "projectSourcePath": "<path_to_source_files>",
     "projectSourceParser": {
-        "matches": [
-            { "regex": "<regex>" },
+        "parser": [
+            { "type":"match", "regex": "<regex>" },
         ]
     },
     "wordingsSource": "<path_to_source_wordings_file_or_url>",
 }
 ```
 
-All config :
+All configs :
 
 ```
 {
     "projectSourcePath": "<path_to_source_files>",
     "projectSourceParser": {
-        "matches": [
-            { "regex": "<regex_1>", position: <extract_value_index_default_1> },
-            { "regex": "<regex_2>", position: <extract_value_index_default_1> },
+        "parser": [
+            {
+                "type": "<match/replace>",
+                "regex": "<regex_1_1>",
+                "position": <match__extract_value_index_default_1>,
+                "by": "<replace__value_default_empty>",
+                "post_regex": {
+                    "type":"<match/replace>",
+                    "regex": "<regex_1_2>",
+                    "post_regex": {
+                        ...
+                    }
+                }
+            },
             ...
         ],
-        "replaces": [
-            { "regex": "<regex_1>", by: "<value_default_empty>" },
-            { "regex": "<regex_2>", by: "<value_default_empty>" },
-        ]
     },
     "wordingsSource": "<path_to_source_wordings_file_or_url>",
     "wordingsSourceParser": {
         "replaces": [
-            { "regex": "<regex_1>", "by": "<value_default_empty>" }
-        ]
+            { "regex": "<regex>", "by": "<value_default_empty>" },
+            ...
+        ],
     },
+    "compare" : {
+        "dynamicRegexValue": "<regex>"
+    }
 }
 ```
 
-Exemple for a React project :
+Exemple for a React project (simple) :
 
 ```
 {
     "projectSourcePath": "src/",
     "projectSourceParser": {
-        "matches": [{ "regex": "i18n\\.t\\(\"((.|\n)+?)\"" }]
+        "parser": [{ "type": "match", "regex": "i18n\\.t\\(\"((.|\n)+?)\"" }]
     },
     "wordingsSource": "assets/strings/map.json",
     "wordingsSourceParser": {
@@ -67,15 +78,52 @@ Exemple for a React project :
 }
 ```
 
+Exemple for a React project (more complexe -> trying to manage dynamic wordings) :
+
+```
+{
+  "projectSourcePath": "src/",
+  "projectSourceParser": {
+    "parser": [
+      {
+        "_comment": "match all I18n.t(*)",
+        "type": "match",
+        "regex": "I18n\\.t\\(((?:[^()]*|\\((?:[^()]*|\\([^()]*\\))*\\))*)\\)",
+        "post_regex": {
+          "_comment": "match all \"*\" ",
+          "type": "match",
+          "regex": "(?:\"|`|')(.*?)(?:\"|`|')",
+          "post_regex": {
+            "_comment": "replace dynamic value by *",
+            "type": "replace",
+            "regex": "(\\${.*})",
+            "by": "*",
+            "post_regex": {
+              "_comment": "keep only valid wordings because previous regex can have bad values",
+              "type": "replace",
+              "regex": "^.*[^a-zA-Z0-9._\\-*].*$",
+            }
+          }
+        }
+      }
+    ]
+  },
+  "wordingsSource": "assets/strings/EN-en.json"
+  "compare" : {
+    "dynamicRegexValue": "\\*"
+  }
+}
+```
+
 Exemple for a Flutter project :
 
 ```
 {
     "projectSourcePath": "lib/src/",
     "projectSourceParser": {
-        "matches": [
-            { "regex": "context\\.curLocalizations\\.([a-zA-Z0-9_]+)" },
-            { "regex": "AppLocalizations\\.of\\(context\\)!?\\.([a-zA-Z0-9_]+)" }
+        "parser": [
+            { "type": "match", "regex": "context\\.curLocalizations\\.([a-zA-Z0-9_]+)" },
+            { "type": "match", "regex": "AppLocalizations\\.of\\(context\\)!?\\.([a-zA-Z0-9_]+)" }
         ]
     },
     "wordingsSource": "lib/asset/translations/intl_fr.arb",

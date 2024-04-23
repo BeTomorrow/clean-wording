@@ -62,7 +62,12 @@ export async function mainFunction(argv: string[]) {
       config.wordingsSource,
       config.wordingsSourceParser
     );
-    const diff = compare(projectKeys, fileKeys, "normal", "diff", false);
+    const diff = compare(
+      projectKeys,
+      fileKeys,
+      "normal",
+      config.compare?.dynamicRegexValue
+    );
     log(diff);
   } else {
     const projectKeys = getProjectKeys(
@@ -74,7 +79,12 @@ export async function mainFunction(argv: string[]) {
       config.wordingsSource,
       config.wordingsSourceParser
     );
-    const diff = compare(projectKeys, fileKeys, "inverted", "diff", false);
+    const diff = compare(
+      projectKeys,
+      fileKeys,
+      "inverted",
+      config.compare?.dynamicRegexValue
+    );
     log(diff);
   }
 }

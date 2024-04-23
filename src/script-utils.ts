@@ -4,9 +4,28 @@ import _ from "lodash";
 import path from "path";
 import util from "util";
 
+interface ProjectSourceSubParser {
+  type: "match" | "replace";
+  regex: string;
+  position?: number | null;
+  by?: string | null;
+  post_regex?: ProjectSourceMatchParser | ProjectSourceReplaceParser;
+}
+
+type ProjectSourceMatchParser = ProjectSourceSubParser & {
+  type: "match";
+  position?: number;
+  by?: null;
+};
+
+type ProjectSourceReplaceParser = ProjectSourceSubParser & {
+  type: "replace";
+  by?: string;
+  position?: null;
+};
+
 interface ProjectSourceParser {
-  matches: { regex: string; position?: number }[];
-  replaces?: { regex: string; by?: string }[];
+  parser: (ProjectSourceSubParser | ProjectSourceReplaceParser)[];
 }
 
 interface WordingSourceParser {
@@ -37,8 +56,7 @@ export const compare = (
   aKeys: string[],
   bKeys: string[],
   side: "normal" | "inverted",
-  operation: "diff" | "equal",
-  include: boolean
+  dynamicRegexValue: string | null
 ) => {
   const listA = side === "normal" ? aKeys : bKeys;
   const listB = side === "normal" ? bKeys : aKeys;
@@ -50,36 +68,21 @@ export const compare = (
     if (localKey === serverKey) {
       return true;
     }
-    const diffRegex = new RegExp(
-      `^${localKey
-        .replace(new RegExp("\\.", "g"), "\\.")
-        .replace(new RegExp("\\*", "g"), ".*")}$`
-    );
-    const regexResult = diffRegex.exec(serverKey);
-    if (regexResult) {
-      return true;
-    }
-    if (include && serverKey.includes(localKey)) {
-      return true;
+    if (dynamicRegexValue) {
+      const diffRegex = new RegExp(
+        `^${localKey.replace(new RegExp(dynamicRegexValue, "g"), ".*")}$`
+      );
+      const regexResult = diffRegex.exec(serverKey);
+      if (regexResult) {
+        return true;
+      }
     }
     return false;
   };
 
-  if (operation === "diff") {
-    return getUniqSortedKeys(
-      _.differenceWith(listA, listB, (a, b) => doOperation(a, b))
-    );
-  } else {
-    let same: string[] = [];
-    listA.forEach((a) => {
-      listB.forEach((b) => {
-        if (doOperation(a, b)) {
-          same = [...same, a];
-        }
-      });
-    });
-    return getUniqSortedKeys(same);
-  }
+  return getUniqSortedKeys(
+    _.differenceWith(listA, listB, (a, b) => doOperation(a, b))
+  );
 };
 
 export const getProjectKeys = (
@@ -154,7 +157,7 @@ export const getKeysInFolder = (
   let keys: string[] = [];
 
   const files = fs.readdirSync(dirname);
-  files.forEach((file) => {
+  files?.forEach((file) => {
     const folders: string[] = [];
     const filenames: string[] = [];
 
@@ -180,38 +183,69 @@ export const getKeysInFolder = (
 
       const content = fs.readFileSync(dirname + "/" + filename, "utf-8");
 
-      projectSourceParser.matches.forEach(({ regex, position }) => {
-        const regexGlobal = new RegExp(regex, "g");
-
-        let match: RegExpExecArray | null;
-        while ((match = regexGlobal.exec(content)) !== null) {
-          if (verbose) console.log(" match " + match);
-          if (match.index === regexGlobal.lastIndex) {
-            regexGlobal.lastIndex++;
-          }
-
-          let matchValue = match[position ?? 1];
-          if (matchValue.length === 0) {
-            continue;
-          }
-
-          projectSourceParser.replaces?.forEach(
-            (replace) =>
-              (matchValue = matchValue.replace(
-                new RegExp(replace.regex),
-                replace.by ?? ""
-              ))
-          );
-
-          if (matchValue) {
-            keys = [...keys, matchValue];
-          } else {
-            console.log("ignore ", match[position ?? 1]);
-          }
-        }
+      projectSourceParser.parser.forEach((parser) => {
+        keys = [...keys, ...parserContent(parser, content, verbose, 1)];
       });
     });
   });
+
+  return keys;
+};
+
+export const parserContent = (
+  parser: ProjectSourceSubParser | ProjectSourceReplaceParser,
+  content: string,
+  verbose: Boolean,
+  depth: number
+): string[] => {
+  let keys: string[] = [];
+
+  if (parser.type === "replace") {
+    const replacedContent = content.replace(
+      new RegExp(parser.regex),
+      parser.by ?? ""
+    );
+
+    if (parser.post_regex) {
+      keys = parserContent(parser.post_regex, replacedContent, verbose, depth);
+    } else if (replacedContent) {
+      if (verbose)
+        console.log(" ".repeat(depth + 1) + "found '" + replacedContent + "'");
+      keys = [replacedContent];
+    }
+  }
+
+  if (parser.type === "match") {
+    const regexGlobal = new RegExp(parser.regex, "g");
+
+    let match: RegExpExecArray | null;
+    while ((match = regexGlobal.exec(content)) !== null) {
+      if (verbose) console.log(" ".repeat(depth) + "match " + match);
+      if (match.index === regexGlobal.lastIndex) {
+        regexGlobal.lastIndex++;
+      }
+
+      if (match.length <= 1) {
+        continue;
+      }
+
+      const matchValue = match[parser.position ?? 1];
+      if (!matchValue) {
+        continue;
+      }
+
+      if (parser.post_regex) {
+        keys = [
+          ...keys,
+          ...parserContent(parser.post_regex, matchValue, verbose, depth + 1),
+        ];
+      } else {
+        if (verbose)
+          console.log(" ".repeat(depth + 1) + "found '" + matchValue + "'");
+        keys = [...keys, matchValue];
+      }
+    }
+  }
 
   return keys;
 };

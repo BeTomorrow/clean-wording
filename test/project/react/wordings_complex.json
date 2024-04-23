@@ -1,0 +1,12 @@
+{
+  "wording.withDynamic.end.1": "Wording 1",
+  "wording.withDynamic.end.2": "Wording 1",
+  "wording.withDynamic.middle.1.value": "Wording 1",
+  "wording.withDynamic.middle.2.value": "Wording 1",
+  "wording.withTernaire.default.1": "Wording 1",
+  "wording.withTernaire.default.2": "Wording 2",
+  "wording.withTernaire.withFunction.1": "Wording 1",
+  "wording.withTernaire.withFunction.2": "Wording 2",
+  "wording.withTernaire.withNewLine.1": "Wording 1",
+  "wording.withTernaire.withNewLine.2": "Wording 2"
+}
