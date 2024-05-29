@@ -9,7 +9,10 @@ interface ProjectSourceSubParser {
   regex: string;
   position?: number | null;
   by?: string | null;
-  post_regex?: ProjectSourceMatchParser | ProjectSourceReplaceParser;
+  post_regex?:
+    | ProjectSourceMatchParser
+    | ProjectSourceReplaceParser
+    | ProjectSourceIgnoreParser;
 }
 
 type ProjectSourceMatchParser = ProjectSourceSubParser & {
