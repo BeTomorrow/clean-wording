@@ -5,7 +5,7 @@ import path from "path";
 import util from "util";
 
 interface ProjectSourceSubParser {
-  type: "match" | "replace";
+  type: "match" | "replace" | "ignore";
   regex: string;
   position?: number | null;
   by?: string | null;
@@ -24,8 +24,15 @@ type ProjectSourceReplaceParser = ProjectSourceSubParser & {
   position?: null;
 };
 
+type ProjectSourceIgnoreParser = ProjectSourceSubParser & {
+  type: "ignore";
+  by?: null;
+  position?: null;
+};
+
 interface ProjectSourceParser {
   parser: (ProjectSourceSubParser | ProjectSourceReplaceParser)[];
+  onlyFilesWithExtensions?: string[];
 }
 
 interface WordingSourceParser {
@@ -161,10 +168,27 @@ export const getKeysInFolder = (
     const folders: string[] = [];
     const filenames: string[] = [];
 
-    if (file.split(".").length > 1) {
-      filenames.push(file);
-    } else {
+    const fileSplitted = file.split(".");
+    if (fileSplitted.length == 1) {
       folders.push(file);
+    } else if (fileSplitted.length == 2) {
+      const fileExtension = fileSplitted[1];
+      if (projectSourceParser.onlyFilesWithExtensions === undefined) {
+        filenames.push(file);
+      } else {
+        if (
+          projectSourceParser.onlyFilesWithExtensions.includes(fileExtension)
+        ) {
+          filenames.push(file);
+        } else {
+          if (verbose)
+            console.log(
+              "file ignored because not valid file extension " + file
+            );
+        }
+      }
+    } else {
+      if (verbose) console.log("file ignored because bad format " + file);
     }
 
     folders.forEach((folder) => {
@@ -247,10 +271,29 @@ export const parserContent = (
     }
   }
 
+  if (parser.type === "ignore") {
+    const regex = new RegExp(parser.regex);
+    if (regex.test(content)) {
+      if (verbose)
+        console.log(" ".repeat(depth + 1) + "ignore '" + content + "'");
+    } else {
+      if (parser.post_regex) {
+        keys = [
+          ...keys,
+          ...parserContent(parser.post_regex, content, verbose, depth + 1),
+        ];
+      } else {
+        if (verbose)
+          console.log(" ".repeat(depth + 1) + "found '" + content + "'");
+        keys = [...keys, content];
+      }
+    }
+  }
+
   return keys;
 };
 
 export const log = (array: any[]) => {
-  console.log(util.inspect(array, { maxArrayLength: null }));
+  console.log("keys: " + util.inspect(array, { maxArrayLength: null }));
   console.log("TOTAL ", array.length);
 };

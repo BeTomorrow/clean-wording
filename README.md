@@ -44,6 +44,7 @@ All configs :
             },
             ...
         ],
+        onlyFilesWithExtensions: ["<extension_1>", ...]
     },
     "wordingsSource": "<path_to_source_wordings_file_or_url>",
     "wordingsSourceParser": {
@@ -109,6 +110,14 @@ Exemple for a React project (more complexe -> trying to manage dynamic wordings)
     ]
   },
   "wordingsSource": "assets/strings/EN-en.json"
+  "wordingsSourceParser": {
+        "replaces": [
+            {
+                "_comment": "remove wordings used only for config, store, ...",
+                "regex": "(NSCameraUsageDescription)|<...>"
+            }
+        ]
+    }
   "compare" : {
     "dynamicRegexValue": "\\*"
   }

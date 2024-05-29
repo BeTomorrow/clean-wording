@@ -1,4 +1,4 @@
-
+/*
 export const Screen: React.FC<ConfirmEmailFormProps> = () => {
   return (
     <div>
@@ -12,3 +12,4 @@ export const Screen: React.FC<ConfirmEmailFormProps> = () => {
     </div>
   );
 };
+*/

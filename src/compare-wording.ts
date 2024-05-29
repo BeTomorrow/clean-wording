@@ -46,12 +46,14 @@ export async function mainFunction(argv: string[]) {
       options.verbose
     );
     log(projectKeys);
+    process.exit(0);
   } else if (options.showAllFileWordingKeys) {
     const fileKeys = await getFileKeys(
       config.wordingsSource,
       config.wordingsSourceParser
     );
     log(fileKeys);
+    process.exit(0);
   } else if (options.showOrphanProjectKeys) {
     const projectKeys = getProjectKeys(
       config.projectSourcePath,
@@ -69,6 +71,7 @@ export async function mainFunction(argv: string[]) {
       config.compare?.dynamicRegexValue
     );
     log(diff);
+    process.exit(diff.length > 0 ? 1 : 0);
   } else {
     const projectKeys = getProjectKeys(
       config.projectSourcePath,
@@ -86,5 +89,6 @@ export async function mainFunction(argv: string[]) {
       config.compare?.dynamicRegexValue
     );
     log(diff);
+    process.exit(diff.length > 0 ? 1 : 0);
   }
 }

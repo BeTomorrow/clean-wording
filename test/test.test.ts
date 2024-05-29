@@ -1,9 +1,13 @@
 import { compare, getFileKeys, getProjectKeys } from "../src/script-utils";
 
 test("Flutter - show project wording keys", () => {
-  const keys = getProjectKeys("test/project/flutter/src", {
-    parser: [{ type: "match", regex: "localizations\\.([a-zA-Z0-9_]+)" }],
-  });
+  const keys = getProjectKeys(
+    "test/project/flutter/src",
+    {
+      parser: [{ type: "match", regex: "localizations\\.([a-zA-Z0-9_]+)" }],
+    },
+    true
+  );
 
   expect(keys).toStrictEqual([
     "wording",
